@@ -1,2 +1,4 @@
 *.tmp
 *.txt
+.DS_Store
+combined.tmp-e

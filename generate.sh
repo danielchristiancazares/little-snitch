@@ -1,32 +1,31 @@
 #!/bin/bash
 wget https://winhelp2002.mvps.org/hosts.txt -O mvps.txt
 
-grep --extended-regexp '^0.0.0.0 .*[^0-9]$' mvps.txt| sed '/:/d' | sed 's/\t/ /g' | tr -s ' \n' | sed 's/#.*//g' | cut -d' ' -f2- | sed 's/ //g' | sort > mvps.tmp
-
 wget https://someonewhocares.org/hosts/zero/hosts -O someonewhocares.txt
-
-grep --extended-regexp '^0.0.0.0 .*[^0-9]$' someonewhocares.txt| sed '/:/d' | sed 's/\t/ /g' | tr -s ' \n' | sed 's/#.*//g' | cut -d' ' -f2- | sed 's/ //g' | sort > someonewhocares.tmp
 
 wget https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O stevenblacklist.txt
 
-grep --extended-regexp '^0.0.0.0 .*[^0-9]$' stevenblacklist.txt | sed '/:/d' | sed 's/\t/ /g' | tr -s ' \n' | sed 's/#.*//g' | cut -d' ' -f2- | sed 's/ //g' | sort > stevenblacklist.tmp
+# Try later to group sed with multiple commands. sed -e '/:/d' 's/\t/ /g' ... etc
+grep --extended-regexp '^0.0.0.0 .*[^0-9]$' mvps.txt            | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > mvps.tmp
 
-rm -rf combined.tmp
+grep --extended-regexp '^0.0.0.0 .*[^0-9]$' someonewhocares.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > someonewhocares.tmp
 
-cat mvps.tmp >> combined.tmp
+grep --extended-regexp '^0.0.0.0 .*[^0-9]$' stevenblacklist.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > stevenblacklist.tmp
 
-cat someonewhocares.tmp >> combined.tmp
+# sed -i -e "s/\r//g" combined.tmp
 
-cat stevenblacklist.tmp >> combined.tmp
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp
 
 # Daniel Blacklist
 
-echo -n '{"name":"Daniel's Combo Blacklist","description":"Daniel's Combo Blacklist","rules":[{"action":"deny","process":"any","remote-hosts": ["' > blacklist.tmp
+echo -n '{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"deny","process":"any","remote-hosts":' > blacklist.tmp
 
-uniq -i combined.tmp | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/","/g' | tr -d '\n' >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' combined.tmp >> blacklist.tmp
 
-echo -n '"]}]}' >> blacklist.tmp
+echo -n '}]}' >> blacklist.tmp
 
-cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
+cat blacklist.tmp | tr -d '\n' > blacklist.lsrules
 
-exit 0
+rm *.tmp
+
+exit 0 
