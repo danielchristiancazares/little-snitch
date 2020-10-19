@@ -1,4 +1,6 @@
 #!/bin/bash
+SHA1SUM_OLD="$(sha1sum blacklist.lsrules)"
+SHA1SUM_NEW=""
 wget https://winhelp2002.mvps.org/hosts.txt -O mvps.txt
 
 wget https://someonewhocares.org/hosts/zero/hosts -O someonewhocares.txt
@@ -33,5 +35,9 @@ echo -n '}]}' >> blacklist.tmp
 cat blacklist.tmp | tr -d '\n' > blacklist.lsrules
 
 rm *.tmp
+
+SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
+
+echo "OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 exit 0 
