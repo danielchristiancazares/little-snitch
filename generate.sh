@@ -9,7 +9,9 @@ wget https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts -O stevenb
 
 wget https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts -O add2o7.txt
 
-wget https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts_without_controversies.txt -O KAD.txt
+wget 'https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts_without_controversies.txt' -O KAD.txt
+
+wget 'https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0' -O peterlowe.txt
 
 # Try later to group sed with multiple commands. sed -e '/:/d' 's/\t/ /g' ... etc
 grep --extended-regexp '^0.0.0.0 .*[^0-9]$' KAD.txt             | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > KAD.tmp
@@ -20,9 +22,12 @@ grep --extended-regexp '^0.0.0.0 .*[^0-9]$' mvps.txt            | sed -e 's/\n/ 
 
 grep --extended-regexp '^0.0.0.0 .*[^0-9]$' someonewhocares.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > someonewhocares.tmp
 
+
 grep --extended-regexp '^0.0.0.0 .*[^0-9]$' stevenblacklist.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > stevenblacklist.tmp
 
-sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp
+grep --extended-regexp '^[0-9]*.[0-9].[0-9]*.[0-9]* .*[^0-9]$' peterlowe.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > peterlowe.tmp
+
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp
 
 # Daniel Blacklist
 
