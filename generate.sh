@@ -47,4 +47,8 @@ SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
 
 echo "OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
+/usr/bin/git add --all
+/usr/bin/git commit --message "Update on ${date}"
+/usr/bin/git push
+
 exit 0 
