@@ -22,14 +22,17 @@ grep --extended-regexp '^0.0.0.0 .*[^0-9]$' mvps.txt            | sed -e 's/\n/ 
 
 grep --extended-regexp '^0.0.0.0 .*[^0-9]$' someonewhocares.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > someonewhocares.tmp
 
-
 grep --extended-regexp '^0.0.0.0 .*[^0-9]$' stevenblacklist.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > stevenblacklist.tmp
 
 grep --extended-regexp '^[0-9]*.[0-9].[0-9]*.[0-9]* .*[^0-9]$' peterlowe.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > peterlowe.tmp
 
-cat daniel.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > daniel.tmp
+cat custom_block.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > custom_block.tmp
 
-sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp daniel.tmp
+cat custom_allow.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > custom_allow.tmp
+
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp custom_block.tmp
+
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_allow.tmp' custom_allow.tmp
 
 # Daniel Blacklist
 
@@ -41,11 +44,25 @@ echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' > blacklist.lsrules
 
-rm *.tmp
-
 SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
 
-echo "OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
+echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
+
+# Daniel Whitelist
+
+echo -n '{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"allow","process":"any","remote-hosts":' > whitelist.tmp
+
+jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> whitelist.tmp
+
+echo -n '}]}' >> whitelist.tmp
+
+cat whitelist.tmp | tr -d '\n' > whitelist.lsrules
+
+rm *.tmp
+
+SHA1SUM_NEW="$(sha1sum whitelist.lsrules)"
+
+echo "Whitelist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
