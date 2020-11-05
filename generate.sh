@@ -1,6 +1,7 @@
 #!/bin/bash
 SHA1SUM_OLD="$(sha1sum blacklist.lsrules)"
 SHA1SUM_NEW=""
+
 wget https://winhelp2002.mvps.org/hosts.txt -O mvps.txt
 
 wget https://someonewhocares.org/hosts/zero/hosts -O someonewhocares.txt
@@ -50,7 +51,9 @@ echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 # Daniel Whitelist
 
-echo -n '{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"allow","process":"any","remote-hosts":' > whitelist.tmp
+SHA1SUM_OLD="$(sha1sum whitelist.lsrules)"
+
+echo -n '{"name":"Daniel Combo Whitelist","description":"Daniel Combo Whitelist","rules":[{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' > whitelist.tmp
 
 jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> whitelist.tmp
 
@@ -68,4 +71,4 @@ echo "Whitelist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 /usr/bin/git commit --message "Update on ${date}"
 /usr/bin/git push
 
-exit 0 
+exit 0
