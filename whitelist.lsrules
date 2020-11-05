@@ -1,1 +1,1 @@
-{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"allow","process":"any","remote-hosts":["www.google.com"]}]}
+{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"allow","process":"any","remote-hosts":["skxfs.skechers.com","www.google.com"]}]}
