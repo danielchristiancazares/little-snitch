@@ -27,13 +27,13 @@ grep --extended-regexp '^0.0.0.0 .*[^0-9]$' stevenblacklist.txt | sed -e 's/\n/ 
 
 grep --extended-regexp '^[0-9]*.[0-9].[0-9]*.[0-9]* .*[^0-9]$' peterlowe.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > peterlowe.tmp
 
-cat custom_block.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > custom_block.tmp
+cat block.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > block.tmp
 
-cat custom_allow.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > custom_allow.tmp
+cat allow.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > allow.tmp
 
-sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp custom_block.tmp
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp block.tmp
 
-sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_allow.tmp' custom_allow.tmp
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_allow.tmp' allow.tmp
 
 # Daniel Blacklist
 
