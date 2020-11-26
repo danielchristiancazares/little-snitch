@@ -41,7 +41,7 @@ echo -n '{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist"
 
 jq -Rsc '. / "\n" - [""]' combined.tmp >> blacklist.tmp
 
-echo -n '}]}' >> blacklist.tmp
+echo -n '},' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' > blacklist.lsrules
 
@@ -53,13 +53,13 @@ echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 SHA1SUM_OLD="$(sha1sum whitelist.lsrules)"
 
-echo -n '{"name":"Daniel Combo Whitelist","description":"Daniel Combo Whitelist","rules":[{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' > whitelist.tmp
+echo -n '"rules":[{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
 
-jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> whitelist.tmp
+jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
 
-echo -n '}]}' >> whitelist.tmp
+echo -n '}]}' >> blacklist.tmp
 
-cat whitelist.tmp | tr -d '\n' > whitelist.lsrules
+cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
 
 rm *.tmp
 
