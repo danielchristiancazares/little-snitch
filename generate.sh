@@ -42,7 +42,7 @@ echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[
 
 jq -Rsc '. / "\n" - [""]' combined_block.tmp >> blacklist.tmp
 
-echo -n '},{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.lsrules
+echo -n '},{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
 
