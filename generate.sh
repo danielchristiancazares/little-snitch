@@ -48,10 +48,8 @@ jq -Rsc '. / "\n" - [""]' cloudfront.txt >> cloudfront.tmp
 echo -n '}]}' >> cloudfront.tmp
 cat cloudfront.tmp | tr -d '\n' >> cloudfront.lsrules
 
-DATE="echo -n $(date)"
-
 /usr/bin/git add --all
-/usr/bin/git commit --message "Update on ${DATE}"
+/usr/bin/git commit --message "Update on $(echo -n date)"
 /usr/bin/git push
 
 rm -rf *.tmp
