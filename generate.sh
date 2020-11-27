@@ -31,20 +31,22 @@ cat block.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \
 
 cat allow.txt | sed -e 's/\n/ /g' -e '/:/d' | tr -dc '[[:print:]\n]' | tr -s ' \n' | sed -e 's/#.*//g' | cut -d' ' -f2- | sed -e 's/ //g' > allow.tmp
 
-sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp block.tmp
+sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_block.tmp' someonewhocares.tmp mvps.tmp stevenblacklist.tmp add2o7.tmp KAD.tmp peterlowe.tmp block.tmp
 
 sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_allow.tmp' allow.tmp
 
 # Daniel Blacklist
 echo -n "" > blacklist.tmp
 
+cat blacklist.tmp
+
 echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","process":"any","remote-hosts":' > blacklist.tmp
 
-jq -Rsc '. / "\n" - [""]' block.tmp >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' combined_block.tmp >> blacklist.tmp
 
 echo -n '},{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.lsrules
 
-jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
 
 echo -n '}]}' >> blacklist.tmp
 
