@@ -1,6 +1,5 @@
 #!/bin/bash
-SHA1SUM_OLD="$(sha1sum blacklist.lsrules)"
-SHA1SUM_NEW=""
+rm -rf *.lsrules *.tmp
 
 wget https://winhelp2002.mvps.org/hosts.txt -O mvps.txt
 
@@ -47,8 +46,6 @@ jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
 echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> littlesnitch.lsrules
-
-rm *.tmp
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
