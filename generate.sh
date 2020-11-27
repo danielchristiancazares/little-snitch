@@ -43,7 +43,7 @@ echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> littlesnitch.lsrules
 
-echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","remote-hosts":' > cloudfront.tmp
+echo -n '{"name":"Daniels Cloudfront Blacklist","description":"Cloudfront Blacklist","rules":[{"action":"deny","remote-hosts":' > cloudfront.tmp
 jq -Rsc '. / "\n" - [""]' cloudfront.txt >> cloudfront.tmp
 echo -n '}]}' >> cloudfront.tmp
 cat cloudfront.tmp | tr -d '\n' >> cloudfront.lsrules
