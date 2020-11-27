@@ -51,4 +51,6 @@ cat blacklist.tmp | tr -d '\n' >> littlesnitch.lsrules
 /usr/bin/git commit --message "Update on ${date}"
 /usr/bin/git push
 
+rm -rf *.tmp
+
 exit 0
