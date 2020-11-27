@@ -49,7 +49,7 @@ jq -Rsc '. / "\n" - [""]' block.tmp >> blacklist.tmp
 
 echo -n '},' >> blacklist.tmp
 
-cat blacklist.tmp | tr -d '\n' > blacklist.lsrules
+cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
 
 SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
 
