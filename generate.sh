@@ -38,8 +38,6 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 # Daniel Blacklist
 echo -n "" > blacklist.tmp
 
-cat blacklist.tmp
-
 echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","process":"any","remote-hosts":' > blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' combined_block.tmp >> blacklist.tmp
@@ -52,7 +50,7 @@ echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
 
-rm *.tmp
+#rm *.tmp
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
