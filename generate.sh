@@ -51,6 +51,8 @@ echo -n '},' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
 
+jq '.' blacklist.lsrules
+
 SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
 
 echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
@@ -66,6 +68,8 @@ jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
 echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
+
+jq '.' blacklist.lsrules
 
 rm *.tmp
 
