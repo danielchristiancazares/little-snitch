@@ -44,7 +44,7 @@ echo -n '}]}' >> blacklist.tmp
 cat blacklist.tmp | tr -d '\n' >> littlesnitch.lsrules
 
 echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","remote-hosts":' > cloudfront.tmp
-jq -Rsc '. / "\n" - [""]' cloudfront.tmp >> cloudfront_blacklist.tmp
+jq -Rsc '. / "\n" - [""]' cloudfront.txt >> cloudfront_blacklist.tmp
 echo -n '}]}' >> cloudfront_blacklist.tmp
 cat cloudfront_blacklist.tmp | tr -d '\n' >> cloudfront.lsrules
 
