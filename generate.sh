@@ -36,16 +36,17 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 
 # Daniel Blacklist
 echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","remote-hosts":' > blacklist.tmp
-
 jq -Rsc '. / "\n" - [""]' combined_block.tmp >> blacklist.tmp
-
 echo -n '},{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
-
 jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
-
 echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> littlesnitch.lsrules
+
+echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","remote-hosts":' > cloudfront.tmp
+jq -Rsc '. / "\n" - [""]' cloudfront.tmp >> cloudfront_blacklist.tmp
+echo -n '}]}' >> cloudfront_blacklist.tmp
+cat cloudfront_blacklist.tmp | tr -d '\n' >> cloudfront.lsrules
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
