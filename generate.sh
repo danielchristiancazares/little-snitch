@@ -37,28 +37,17 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 
 # Daniel Blacklist
 
-echo -n '{"name": "Daniel Combo List",
-          "description": "Daniel Combo List", 
-          "rules":[{
-          "action": "deny",
-          "process": "any",
-          "remote-hosts": ' > blacklist.tmp
+echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","process":"any","remote-hosts":' > blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' block.tmp >> blacklist.tmp
 
-echo -n '},' >> blacklist.tmp
+echo -n '},{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.lsrules
+
+jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
+
+echo -n '}]}' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
-
-# Daniel Whitelist
-
-echo -n '{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' > whitelist.tmp
-
-jq -Rsc '. / "\n" - [""]' allow.tmp >> whitelist.tmp
-
-echo -n '}]}' >> whitelist.tmp
-
-cat whitelist.tmp | tr -d '\n' >> blacklist.lsrules
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
