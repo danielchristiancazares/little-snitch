@@ -37,9 +37,15 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 
 # Daniel Blacklist
 
-echo -n '{"name":"Daniel Combo Blacklist","description":"Daniel Combo Blacklist","rules":[{"action":"deny","process":"any","remote-hosts":' > blacklist.tmp
+echo -n '{"name":        "Daniel Combo List",
+          "description": "Daniel Combo Blacklist", 
+          "rules":[
+            {
+              "action": "deny",
+              "process": "any",
+              "remote-hosts": ' > blacklist.tmp
 
-jq -Rsc '. / "\n" - [""]' combined.tmp >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' block.tmp >> blacklist.tmp
 
 echo -n '},' >> blacklist.tmp
 
@@ -53,9 +59,9 @@ echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 SHA1SUM_OLD="$(sha1sum whitelist.lsrules)"
 
-echo -n '"rules":[{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
+echo -n '"{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> whitelist.tmp
 
-jq -Rsc '. / "\n" - [""]' combined_allow.tmp >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
 
 echo -n '}]}' >> blacklist.tmp
 
