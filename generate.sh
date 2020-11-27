@@ -36,7 +36,7 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --dictionary-order --unique --mergesort --output='combined_allow.tmp' allow.tmp
 
 # Daniel Blacklist
-echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","denied-remote-hosts":' > blacklist.tmp
+echo -n '{"name":"Daniel Combo List","description":"Daniel Combo List","rules":[{"action":"deny","remote-hosts":' > blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' combined_block.tmp >> blacklist.tmp
 
