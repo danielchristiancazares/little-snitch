@@ -59,7 +59,7 @@ echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
 
 SHA1SUM_OLD="$(sha1sum whitelist.lsrules)"
 
-echo -n '"{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> whitelist.tmp
+echo -n '"{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
 
