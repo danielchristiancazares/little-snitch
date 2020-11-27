@@ -37,13 +37,12 @@ sort -t'\n' --ignore-case --ignore-nonprinting --ignore-leading-blanks --diction
 
 # Daniel Blacklist
 
-echo -n '{"name":        "Daniel Combo List",
-          "description": "Daniel Combo Blacklist", 
-          "rules":[
-            {
-              "action": "deny",
-              "process": "any",
-              "remote-hosts": ' > blacklist.tmp
+echo -n '{"name": "Daniel Combo List",
+          "description": "Daniel Combo List", 
+          "rules":[{
+          "action": "deny",
+          "process": "any",
+          "remote-hosts": ' > blacklist.tmp
 
 jq -Rsc '. / "\n" - [""]' block.tmp >> blacklist.tmp
 
@@ -51,31 +50,15 @@ echo -n '},' >> blacklist.tmp
 
 cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
 
-jq '.' blacklist.lsrules
-
-SHA1SUM_NEW="$(sha1sum blacklist.lsrules)"
-
-echo "Blacklist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
-
 # Daniel Whitelist
 
-SHA1SUM_OLD="$(sha1sum whitelist.lsrules)"
+echo -n '{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' > whitelist.tmp
 
-echo -n '"{"action":"allow","process":"any","protocol":"tcp","ports":"443","remote-hosts":' >> blacklist.tmp
+jq -Rsc '. / "\n" - [""]' allow.tmp >> whitelist.tmp
 
-jq -Rsc '. / "\n" - [""]' allow.tmp >> blacklist.tmp
+echo -n '}]}' >> whitelist.tmp
 
-echo -n '}]}' >> blacklist.tmp
-
-cat blacklist.tmp | tr -d '\n' >> blacklist.lsrules
-
-jq '.' blacklist.lsrules
-
-rm *.tmp
-
-SHA1SUM_NEW="$(sha1sum whitelist.lsrules)"
-
-echo "Whitelist - OLD: ${SHA1SUM_OLD} - NEW: ${SHA1SUM_NEW}"
+cat whitelist.tmp | tr -d '\n' >> blacklist.lsrules
 
 /usr/bin/git add --all
 /usr/bin/git commit --message "Update on ${date}"
